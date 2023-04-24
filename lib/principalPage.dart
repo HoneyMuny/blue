@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:blue/SelectBondedDevicePage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'ChatPage.dart';
 
 class PrincipalPage extends StatefulWidget {
   @override
@@ -77,6 +78,7 @@ class MyPrincipalPage extends State<PrincipalPage>{
           children: <Widget>[
             ListTile(
               title: ElevatedButton(
+                child: Text("Ver dispositivos disponibles: )"),
                 onPressed: () async{
                   final BluetoothDevice? selectedDevice =
                       await Navigator.of(context).push(
@@ -86,13 +88,28 @@ class MyPrincipalPage extends State<PrincipalPage>{
                               }
                               ),
                       );
+                  if (selectedDevice!=null) {
+                    print('Connect -> Selected ' + selectedDevice.address);
+                    _startChat(context,selectedDevice);
+                  } else {
+                    print('Connect -> no device selected');
+                  }
                 },
-                child: Text("Ver dispositivos disponibles :)"),
               ),
             )
           ],
         ),
       ),
+    );
+  }
+
+  void _startChat (BuildContext context, BluetoothDevice server) {
+    Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) {
+              return ChatPage(server: server);
+            }
+        )
     );
   }
 
